@@ -107,12 +107,20 @@ export function makeButton(scene: Phaser.Scene, x: number, y: number, w: number,
   paint();
   if (!opts.disabled) {
     hit.setInteractive({ useHandCursor: true });
-    hit.on('pointerover', () => ((state = 'hover'), paint()));
-    hit.on('pointerout', () => ((state = 'idle'), paint()));
-    hit.on('pointerdown', () => ((state = 'down'), paint()));
+    // `armed` is separate from the visual state: on touch screens Phaser can emit pointerout before pointerup,
+    // which used to reset the state and swallow the tap.
+    let armed = false;
+    hit.on('pointerover', (p: Phaser.Input.Pointer) => ((state = p.isDown ? 'down' : 'hover'), paint()));
+    hit.on('pointerout', (p: Phaser.Input.Pointer) => {
+      state = 'idle';
+      if (!p.wasTouch) armed = false; // a mouse dragged off the button cancels; a finger lifting does not
+      paint();
+    });
+    hit.on('pointerdown', () => ((armed = true), (state = 'down'), paint()));
     hit.on('pointerup', () => {
-      const was = state === 'down';
-      state = 'hover';
+      const was = armed;
+      armed = false;
+      state = 'idle';
       paint();
       if (was) {
         if (opts.sfx !== false) Audio.sfx('ui');
