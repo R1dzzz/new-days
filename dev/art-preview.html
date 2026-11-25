@@ -1,0 +1,32 @@
+<!doctype html><html><body style="margin:0;background:#2a7a82">
+<canvas id="c" width="1400" height="900"></canvas>
+<script type="module">
+import { drawCharacterSheet, CHAR_W, CHAR_H } from '/src/art/characterArt.ts';
+import { drawTree, drawStump, drawRock, drawBush, drawShell, drawCampfire, drawStandingStone, drawWorkbench, drawCabin, drawShop, drawLighthouse, drawHut, drawCropAtlas } from '/src/art/objectArt.ts';
+import { drawIcon } from '/src/art/iconArt.ts';
+import { ITEMS } from '/src/data/items.ts';
+import { drawIslandTerrain, drawWaterBase, drawWaterHighlights, drawSoil } from '/src/art/terrainArt.ts';
+import { generateIsland } from '/src/world/WorldData.ts';
+const c = document.getElementById('c'); const g = c.getContext('2d');
+g.fillStyle = g.createPattern(drawWaterBase(), 'repeat'); g.fillRect(0,0,1400,900);
+g.fillStyle = g.createPattern(drawWaterHighlights(), 'repeat'); g.fillRect(0,0,1400,900);
+// characters: 3 looks
+const looks = [{skin:1,hairStyle:0,hairColor:1,outfitStyle:0,outfitColor:0},{skin:3,hairStyle:1,hairColor:5,outfitStyle:1,outfitColor:1},{skin:0,hairStyle:2,hairColor:3,outfitStyle:2,outfitColor:4},{skin:4,hairStyle:3,hairColor:7,outfitStyle:0,outfitColor:2}];
+looks.forEach((l,i)=>{ g.drawImage(drawCharacterSheet(l), 0, i*CHAR_H*1 + 0); });
+// objects
+let x = 220;
+for (const o of [drawTree(0),drawTree(1),drawTree(2),drawStump(),drawRock(0),drawRock(1),drawBush(true),drawBush(false),drawShell(0),drawShell(1),drawStandingStone(),drawWorkbench()]) { g.drawImage(o, x, 10); x += o.width + 6; }
+g.drawImage(drawCampfire(), 220, 120);
+g.drawImage(drawCabin(), 330, 120); g.drawImage(drawShop(), 470, 120); g.drawImage(drawHut(), 640, 120); g.drawImage(drawLighthouse(), 760, 100);
+g.drawImage(drawCropAtlas(), 860, 140, 320, 128*2);
+// icons
+let ix = 10, iy = 330;
+for (const id of Object.keys(ITEMS)) { g.fillStyle='rgba(30,40,50,.7)'; g.fillRect(ix-2,iy-2,68,68); g.drawImage(drawIcon(id), ix, iy, 64, 64); ix += 72; if (ix > 1300) { ix = 10; iy += 72; } }
+// terrain crop
+const isl = generateIsland();
+const t = drawIslandTerrain(isl);
+g.drawImage(t, 20*32, 12*32, 20*32, 12*32, 10, 520, 640, 384);
+g.drawImage(t, 24*32, 36*32, 20*32, 12*32, 660, 520, 640, 384);
+g.drawImage(drawSoil(false), 1320, 520); g.drawImage(drawSoil(true), 1320, 560);
+window.__done = true;
+</script></body></html>

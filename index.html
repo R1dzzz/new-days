@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#1d3b3a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <title>The Lost Traveler</title>
+    <style>
+      html, body { margin: 0; padding: 0; height: 100%; background: #10201f; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; overscroll-behavior: none; }
+      #game { position: fixed; inset: 0; }
+      #game canvas { display: block; }
+      #boot-error { display: none; position: fixed; inset: 0; padding: 24px; color: #ffe9c9; background: #2b1a14; font: 16px/1.5 system-ui, sans-serif; z-index: 10; overflow: auto; }
+    </style>
+  </head>
+  <body>
+    <div id="game"></div>
+    <div id="boot-error"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

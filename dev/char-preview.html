@@ -1,0 +1,13 @@
+<!doctype html><html><body style="margin:0;background:#6faa4a">
+<canvas id="c" width="1200" height="760"></canvas>
+<script type="module">
+import { drawCharacterSheet, CHAR_W, CHAR_H } from '/src/art/characterArt.ts';
+const c = document.getElementById('c'); const g = c.getContext('2d'); g.imageSmoothingEnabled = true;
+const looks = [{skin:1,hairStyle:0,hairColor:1,outfitStyle:0,outfitColor:0},{skin:3,hairStyle:1,hairColor:5,outfitStyle:1,outfitColor:1},{skin:0,hairStyle:2,hairColor:3,outfitStyle:2,outfitColor:4},{skin:4,hairStyle:3,hairColor:7,outfitStyle:0,outfitColor:2}];
+// show: for each look, rows down/left/right/up with frames 0,1,3,4 at 2x scale
+looks.forEach((l,i)=>{ const s = drawCharacterSheet(l);
+  const ox = (i%2)*600, oy = Math.floor(i/2)*380;
+  for (let r=0;r<4;r++) for (const [k,f] of [0,1,3,4,5].entries()) g.drawImage(s, f*CHAR_W, r*CHAR_H, CHAR_W, CHAR_H, ox + k*112 + 10, oy + r*92 + 5, CHAR_W*2.8, CHAR_H*1.9);
+});
+window.__done = true;
+</script></body></html>
